@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
+import validator from "validator";
 import {generateToken} from "../lib/utils.js";
 import cloudinary from "../lib/cloudinary.js";
 
@@ -9,6 +10,9 @@ export const signup = async (req, res) => {
     try {
         if(!fullName || !email || !password || !bio){
             return res.json({success: false, message: 'Missing Details'})
+        }
+        if (!validator.isStrongPassword(password)){
+            return res.json({success: false, message: 'Please provide a valid password'})
         }
         const user =await User.findOne({email});
 
